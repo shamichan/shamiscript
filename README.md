@@ -15,7 +15,8 @@ This userscript enhances your browsing experience by adding custom commands.
 
 1. Install the Tampermonkey extension for your browser.
 2. Click [here](./shamiscript.user.js) to open the script.
-3. Tampermonkey will prompt you to install the script. Click "Install" to complete the installation.
+3. Click on "Raw"
+4. Tampermonkey will prompt you to install the script. Click "Install" to complete the installation.
 
 ### Manual Installation
 
