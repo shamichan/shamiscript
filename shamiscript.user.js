@@ -53,7 +53,7 @@ function applyScriptToPost(post) {
     const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
   
     // apply the new rotation incrementally
-    const newRotation = currentRotation + 70;
+    const newRotation = currentRotation + getRandomInteger(50,180);
   
     post.style.transition = "transform 0.01s linear";
     post.style.transform = `rotate(${newRotation}deg)`;
@@ -156,6 +156,10 @@ function applyScriptToPost(post) {
       }
     });
   }
+
+  function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
   
   // create an observer instance
   const observer = new MutationObserver(handleMutations);
@@ -170,4 +174,3 @@ function applyScriptToPost(post) {
   
   // start observing for mutations
   observer.observe(thread, config);
-  
