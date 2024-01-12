@@ -4,6 +4,8 @@
 // @match       https://gosenz.ooo/*
 // @match       https://shamik.ooo/*
 // @match       https://shamiko.org/*
+// @match       https://suwak.ooo/*
+// @match       https://gosenz.ooo/*
 // @grant       none
 // @version     1.0
 // @author      -
