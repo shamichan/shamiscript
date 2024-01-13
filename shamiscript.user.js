@@ -6,6 +6,8 @@
 // @match       https://shamiko.org/*
 // @match       https://suwak.ooo/*
 // @match       https://gosenz.ooo/*
+// @match       https://sachik.ooo/*
+// @match       https://sachiko.org/*
 // @grant       none
 // @version     1.0
 // @author      -
