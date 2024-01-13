@@ -15,32 +15,43 @@
 // ==/UserScript==
 
 function applyScriptToPost(post) {
-  if (post) {
-    const blockQuote = post.querySelector(".post-container > blockquote");
-    const regex = />>\d+/;
-    const match = regex.exec(blockQuote.textContent);
-    let postId = "";
-    let mentionedPost;
+  if (!post) return;
 
-    if (match) {
-      postId = match[0].replace(/^>>/, "");
+  const blockQuote = post.querySelector(".post-container > blockquote");
+  const regex = />>\d+/;
+  const matches = regex.exec(blockQuote.textContent);
+  let postId = "";
+  let mentionedPost;
+
+  if (matches) {
+    matches.forEach((match) => {
+      postId = match.replace(/^>>/, "");
       const mentionedPostId = "p" + postId;
       mentionedPost = document.getElementById(mentionedPostId);
-    }
 
-    if (match && blockQuote.textContent.includes("#slap")) {
-      handleSlap(mentionedPost);
-    }
-    if (match && blockQuote.textContent.includes("#chuu")) {
-      handleChuu(mentionedPost);
-    }
-    if (match && blockQuote.textContent.includes("#spank")) {
-      handleSpank(mentionedPost);
-    }
-    if (match && blockQuote.textContent.includes("#hug")) {
-      handleHug(mentionedPost);
-    }
+      handleCommands(blockQuote.textContent, mentionedPost);
+    });
   }
+}
+
+function handleCommands(text, mentionedPost) {
+  const commandActions = {
+    "#slap": handleSlap,
+    "#chuu": handleChuu,
+    "#spank": handleSpank,
+    "#hug": handleHug,
+  };
+
+  Object.keys(commandActions).forEach((command) => {
+    const commandRegex = new RegExp(command, "g");
+    const commandMatches = text.match(commandRegex);
+
+    if (commandMatches) {
+      commandMatches.forEach(() => {
+        commandActions[command](mentionedPost);
+      });
+    }
+  });
 }
 
 // handleSlap takes in the post and fucking slaps it
@@ -107,7 +118,7 @@ function handleChuu(post) {
   const kissMark = document.createElement("span");
   kissMark.innerHTML = "💋";
   kissMark.style.position = "absolute";
-  kissMark.style.fontSize = "24px"
+  kissMark.style.fontSize = "24px";
 
   const randomX = Math.random() * post.clientWidth;
   const randomY = Math.random() * post.clientHeight;
