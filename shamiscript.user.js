@@ -8,6 +8,7 @@
 // @match       https://gosenz.ooo/*
 // @match       https://sachik.ooo/*
 // @match       https://sachiko.org/*
+// @match       https://hidamari.moe/*
 // @grant       none
 // @version     1.0
 // @author      -
