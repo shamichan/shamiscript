@@ -10,8 +10,9 @@
 // @match       https://sachiko.org/*
 // @match       https://hidamari.moe/*
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @author      -
+// @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
 // ==/UserScript==
 
