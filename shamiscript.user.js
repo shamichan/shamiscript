@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @grant       none
 // @version     1.2
-// @author      -
+// @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
 // ==/UserScript==
@@ -174,20 +174,170 @@ function handleMutations(mutations) {
   });
 }
 
+class OptionsFactory {
+  constructor() {
+    this.banner = document.getElementById("banner");
+    this.optionsContainer = this.banner.getElementsByTagName("span")[0];
+    this.options = [];
+    this.modalOverlay = document.getElementById("modal-overlay");
+    this.optionModals = this.modalOverlay.childNodes;
+  }
+
+  createNewBannerOption(optionId, iconHtml, optionTitle) {
+    const newOption = document.createElement("a");
+    newOption.id = optionId;
+    newOption.title = optionTitle;
+    this.optionsContainer
+      .getElementsByTagName("a")[0]
+      .classList.forEach((c) => newOption.classList.add(c));
+    newOption.innerHTML = iconHtml;
+    this.optionsContainer.insertBefore(
+      newOption,
+      this.optionsContainer.getElementsByTagName("a")[
+        this.optionsContainer.getElementsByTagName("a").length - 1
+      ]
+    );
+    this.options.push(newOption);
+    return this;
+  }
+
+  createNewOptionsMenu(optionId) {
+    const newOptionsMenu = document.createElement("div");
+    const tabButts = document.createElement("div");
+    const tabCont = document.createElement("div");
+    tabButts.classList.add("tab-butts");
+    tabCont.classList.add("tab-cont");
+    newOptionsMenu.id = optionId;
+    newOptionsMenu.style.display = "none";
+    this.modalOverlay.children[0].classList.forEach((c) =>
+      newOptionsMenu.classList.add(c)
+    );
+    newOptionsMenu.appendChild(tabButts);
+    newOptionsMenu.appendChild(tabCont);
+    this.modalOverlay.appendChild(newOptionsMenu);
+    return this;
+  }
+
+  addClickListeners() {
+    this.options.forEach((newOption) => {
+      newOption.onclick = () => {
+        this.optionModals.forEach((modal) => {
+          if (modal.id !== newOption.id + "-options")
+            modal.style.display = "none";
+        });
+        const newOptionsMenu = document.getElementById(
+          newOption.id + "-options"
+        );
+        newOptionsMenu.style.display =
+          newOptionsMenu.style.display === "none" ? "block" : "none";
+      };
+    });
+
+    this.options.forEach((newOption) => {
+      Array.from(this.optionsContainer.getElementsByTagName("a")).forEach(
+        (option) => {
+          if (option.id !== newOption.id)
+            option.addEventListener("click", () => {
+              const newOptionsMenu = document.getElementById(
+                newOption.id + "-options"
+              );
+              newOptionsMenu.style.display = "none";
+            });
+        }
+      );
+    });
+
+    return this;
+  }
+
+  createMenuButt(optionsId, buttName, butt_id) {
+    const parent = document.querySelector(`#${optionsId} > .tab-butts`);
+    const tabParent = document.querySelector(`#${optionsId} > .tab-cont`);
+    const butt = document.createElement("a");
+    butt.classList.add("tab-link");
+    butt.innerHTML = buttName;
+    if (butt_id === 0) butt.classList.add("tab-sel");
+    butt.style.padding = "7px";
+
+    const attr = document.createAttribute("data-id");
+    attr.value = butt_id;
+    butt.setAttributeNode(attr);
+
+    butt.onclick = () => {
+      parent.querySelectorAll(".tab-sel").forEach((el) => {
+        el.classList.remove("tab-sel");
+      });
+      butt.classList.add("tab-sel");
+
+      tabParent.childNodes.forEach((content) => {
+        content.style.display =
+          content.getAttribute("data-id") === "" + butt_id ? "block" : "none";
+      });
+    };
+    parent.appendChild(butt);
+    return this;
+  }
+
+  createMenuTabContent(parent, tab_id) {
+    const tabContent = document.createElement("div");
+    tabContent.style.display = tab_id === 0 ? "block" : "none";
+
+    const attr = document.createAttribute("data-id");
+    attr.value = tab_id;
+    tabContent.setAttributeNode(attr);
+    parent.appendChild(tabContent);
+    return this;
+  }
+
+  addTabContentText(text, parentId, tab_id) {
+    const tabElement = document.querySelector(
+      `#${parentId} > .tab-cont > [data-id="${tab_id}"]`
+    );
+    const textToAdd = document.createElement("p");
+    textToAdd.innerHTML = text;
+    tabElement.appendChild(textToAdd);
+    return this;
+  }
+}
+
 function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// create an observer instance
-const observer = new MutationObserver(handleMutations);
+function setupMenus() {
+  const optionsFactory = new OptionsFactory();
+  const option1 = optionsFactory.createNewBannerOption(
+    "shamiscript",
+    "💋",
+    "Shamiscript options"
+  );
+  const option1Menu = optionsFactory.createNewOptionsMenu(
+    "shamiscript-options"
+  );
+  optionsFactory.addClickListeners();
+  optionsFactory.createMenuButt("shamiscript-options", "Info", 0);
+  optionsFactory.createMenuTabContent(
+    document.querySelector("#shamiscript-options > .tab-cont"),
+    0
+  );
+  optionsFactory.addTabContentText("Welcome to slutscript", "shamiscript-options", 0);
+  optionsFactory.addTabContentText("Toggle options will be added here soon, please look forward to it", "shamiscript-options", 0);
+}
 
-const thread = document.body;
-var config = {
-  attributes: true,
-  childList: true,
-  subtree: true,
-  attributeOldValue: true,
-};
+function setupObserver() {
+  const observer = new MutationObserver(handleMutations);
 
-// start observing for mutations
-observer.observe(thread, config);
+  const thread = document.body;
+  var config = {
+    attributes: true,
+    childList: true,
+    subtree: true,
+    attributeOldValue: true,
+  };
+
+  // start observing for mutations
+  observer.observe(thread, config);
+}
+
+setupMenus();
+setupObserver();
