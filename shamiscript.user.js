@@ -11,11 +11,17 @@
 // @match       https://hidamari.moe/*
 // @match       https://monm.ooo/*
 // @grant       none
-// @version     1.2.1
+// @version     1.2.2
 // @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
 // ==/UserScript==
+
+// ill refactor everything soon close your eyes for now its dangerous
+let slapEnabled = true;
+let chuuEnabled = true;
+let spankEnabled = true;
+let hugEnabled = true;
 
 function applyScriptToPost(post) {
   if (!post) return;
@@ -38,20 +44,22 @@ function applyScriptToPost(post) {
 }
 
 function handleCommands(text, mentionedPost) {
-  const commandActions = {
-    "#slap": handleSlap,
-    "#chuu": handleChuu,
-    "#spank": handleSpank,
-    "#hug": handleHug,
+  let commandMap = {
+    "#slap": { handler: handleSlap },
+    "#chuu": { handler: handleChuu },
+    "#spank": { handler: handleSpank },
+    "#hug": { handler: handleHug },
   };
 
-  Object.keys(commandActions).forEach((command) => {
+  Object.keys(commandMap).forEach((command) => {
+    const { handler } = commandMap[command];
+
     const commandRegex = new RegExp(command, "g");
     const commandMatches = text.match(commandRegex);
 
     if (commandMatches) {
       commandMatches.forEach(() => {
-        commandActions[command](mentionedPost);
+        handler(mentionedPost);
       });
     }
   });
@@ -59,6 +67,7 @@ function handleCommands(text, mentionedPost) {
 
 // handleSlap takes in the post and fucking slaps it
 function handleSlap(post) {
+  if(!slapEnabled) return;
   const computedStyle = window.getComputedStyle(post);
 
   // extract the rotation information from the transform property
@@ -69,7 +78,7 @@ function handleSlap(post) {
   const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
 
   // apply the new rotation incrementally
-  const newRotation = currentRotation + getRandomInteger(50, 180);
+  const newRotation = currentRotation + getRandomInteger(10, 70);
 
   post.style.transition = "transform 0.05s linear";
   post.style.transform = `rotate(${newRotation}deg)`;
@@ -77,6 +86,7 @@ function handleSlap(post) {
 
 // handleSpank takes in the post and fucking spanks it
 function handleSpank(post) {
+  if(!spankEnabled) return;
   // get the current background color
   const currentColor = window.getComputedStyle(post).backgroundColor;
 
@@ -114,6 +124,7 @@ function handleSpank(post) {
 
 // handleChuu takes in the post and fucking chuus it
 function handleChuu(post) {
+  if(!chuuEnabled) return;
   post.style.transition = "transform 0.2s ease-in-out";
   // apply the horizontal squish effect
   post.style.transform = "scaleX(0.8)";
@@ -143,6 +154,7 @@ function handleChuu(post) {
 
 // handleHug takes in the post and fucking hugs it
 function handleHug(post) {
+  if(!hugEnabled) return;
   post.style.transition = "transform 0.3s ease-in-out";
   // apply the horizontal squish effect
   post.style.transform = "scaleX(0.5)";
@@ -174,8 +186,12 @@ function handleMutations(mutations) {
   });
 }
 
-class OptionsFactory {
-  constructor() {
+// yes this is a terrible idea but i dont care
+class OptionsBuilder {
+  constructor(optionName) {
+    this.optionName = optionName;
+    this.optionId = this.optionName + "-options";
+    this.tabId = 0;
     this.banner = document.getElementById("banner");
     this.optionsContainer = this.banner.getElementsByTagName("span")[0];
     this.options = [];
@@ -183,9 +199,9 @@ class OptionsFactory {
     this.optionModals = this.modalOverlay.childNodes;
   }
 
-  createNewBannerOption(optionId, iconHtml, optionTitle) {
+  createNewBannerOption(iconHtml, optionTitle) {
     const newOption = document.createElement("a");
-    newOption.id = optionId;
+    newOption.id = this.optionName;
     newOption.title = optionTitle;
     this.optionsContainer
       .getElementsByTagName("a")[0]
@@ -198,27 +214,29 @@ class OptionsFactory {
       ]
     );
     this.options.push(newOption);
-    return this;
+    return this.#createNewOptionsMenu().#addClickListeners();
   }
 
-  createNewOptionsMenu(optionId) {
+  #createNewOptionsMenu() {
     const newOptionsMenu = document.createElement("div");
     const tabButts = document.createElement("div");
     const tabCont = document.createElement("div");
+    const hr = document.createElement("hr");
     tabButts.classList.add("tab-butts");
     tabCont.classList.add("tab-cont");
-    newOptionsMenu.id = optionId;
+    newOptionsMenu.id = this.optionId;
     newOptionsMenu.style.display = "none";
     this.modalOverlay.children[0].classList.forEach((c) =>
       newOptionsMenu.classList.add(c)
     );
     newOptionsMenu.appendChild(tabButts);
+    newOptionsMenu.appendChild(hr);
     newOptionsMenu.appendChild(tabCont);
     this.modalOverlay.appendChild(newOptionsMenu);
     return this;
   }
 
-  addClickListeners() {
+  #addClickListeners() {
     this.options.forEach((newOption) => {
       newOption.onclick = () => {
         this.optionModals.forEach((modal) => {
@@ -250,17 +268,17 @@ class OptionsFactory {
     return this;
   }
 
-  createMenuButt(optionsId, buttName, butt_id) {
-    const parent = document.querySelector(`#${optionsId} > .tab-butts`);
-    const tabParent = document.querySelector(`#${optionsId} > .tab-cont`);
+  createMenuButt(buttName, tabId) {
+    const parent = document.querySelector(`#${this.optionId} > .tab-butts`);
+    const tabParent = document.querySelector(`#${this.optionId} > .tab-cont`);
     const butt = document.createElement("a");
     butt.classList.add("tab-link");
     butt.innerHTML = buttName;
-    if (butt_id === 0) butt.classList.add("tab-sel");
+    if (this.tabId === 0) butt.classList.add("tab-sel");
     butt.style.padding = "7px";
 
     const attr = document.createAttribute("data-id");
-    attr.value = butt_id;
+    attr.value = tabId;
     butt.setAttributeNode(attr);
 
     butt.onclick = () => {
@@ -271,57 +289,167 @@ class OptionsFactory {
 
       tabParent.childNodes.forEach((content) => {
         content.style.display =
-          content.getAttribute("data-id") === "" + butt_id ? "block" : "none";
+          content.getAttribute("data-id") === "" + tabId ? "block" : "none";
       });
     };
     parent.appendChild(butt);
     return this;
   }
 
-  createMenuTabContent(parent, tab_id) {
+  createMenuTabContent() {
+    const parent = document.querySelector(`#${this.optionId} > .tab-cont`);
     const tabContent = document.createElement("div");
-    tabContent.style.display = tab_id === 0 ? "block" : "none";
-
+    tabContent.style.display = this.tabId === 0 ? "block" : "none";
     const attr = document.createAttribute("data-id");
-    attr.value = tab_id;
+    attr.value = this.tabId;
     tabContent.setAttributeNode(attr);
     parent.appendChild(tabContent);
     return this;
   }
 
-  addTabContentText(text, parentId, tab_id) {
+  addTabContentText(text) {
     const tabElement = document.querySelector(
-      `#${parentId} > .tab-cont > [data-id="${tab_id}"]`
+      `#${this.optionId} > .tab-cont > [data-id="${this.tabId}"]`
     );
     const textToAdd = document.createElement("p");
     textToAdd.innerHTML = text;
     tabElement.appendChild(textToAdd);
     return this;
   }
+
+  addTabContentHR() {
+    const tabElement = document.querySelector(
+      `#${this.optionId} > .tab-cont > [data-id="${this.tabId}"]`
+    );
+    const hr = document.createElement("hr");
+    tabElement.appendChild(hr);
+    return this;
+  }
+
+  addTabCheckbox(inputId, inputTitle, labelText, OnChange = () => {}) {
+    const tabElement = document.querySelector(
+      `#${this.optionId} > .tab-cont > [data-id="${this.tabId}"]`
+    );
+    const input = document.createElement("input");
+    const label = document.createElement("label");
+    const br = document.createElement("br");
+
+    input.type = "checkbox";
+    input.id = inputId;
+    input.title = inputTitle;
+    input.addEventListener("change", OnChange);
+
+    label.htmlFor = inputId;
+    label.title = inputTitle;
+    label.textContent = labelText;
+
+    tabElement.appendChild(input);
+    tabElement.appendChild(label);
+    tabElement.appendChild(br);
+    return this;
+  }
+
+  selectTab(tabId) {
+    this.tabId = tabId;
+    return this;
+  }
+
+  build() {
+    return this.#addClickListeners();
+  }
+}
+
+function handleChuuToggle() {
+  chuuEnabled = document.getElementById("chuuEnabled").checked;
+  console.log(chuuEnabled)
+  localStorage.setItem(
+    "chuuEnabled",
+    document.getElementById("chuuEnabled").checked
+  );
+}
+function handleSlapToggle() {
+  slapEnabled = document.getElementById("slapEnabled").checked;
+  console.log(slapEnabled)
+  localStorage.setItem(
+    "slapEnabled",
+    document.getElementById("slapEnabled").checked
+  );
+}
+function handleSpankToggle() {
+  spankEnabled = document.getElementById("spankEnabled").checked;
+  console.log(spankEnabled)
+  localStorage.setItem(
+    "spankEnabled",
+    document.getElementById("spankEnabled").checked
+  );
+}
+function handleHugToggle() {
+  hugEnabled = document.getElementById("hugEnabled").checked;
+  console.log(hugEnabled)
+  localStorage.setItem(
+    "hugEnabled",
+    document.getElementById("hugEnabled").checked
+  );
+
+}
+
+// do not look here it is not good for your eyes
+function loadSettings() {
+  function getLocalStorageItem(key, defaultValue) {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue === null) {
+      localStorage.setItem(key, JSON.stringify(defaultValue));
+      return defaultValue;
+    }
+    return JSON.parse(storedValue);
+  }
+
+  slapEnabled = getLocalStorageItem("slapEnabled", true);
+  document.getElementById("slapEnabled").checked = slapEnabled;
+  console.log("slap", slapEnabled);
+
+  chuuEnabled = getLocalStorageItem("chuuEnabled", true);
+  document.getElementById("chuuEnabled").checked = chuuEnabled;
+  console.log("chuu", chuuEnabled);
+
+  spankEnabled = getLocalStorageItem("spankEnabled", true);
+  document.getElementById("spankEnabled").checked = spankEnabled;
+
+  hugEnabled = getLocalStorageItem("hugEnabled", true);
+  document.getElementById("hugEnabled").checked = hugEnabled;
 }
 
 function getRandomInteger(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
+//  especially do not look here it is definitely nto good for your eyes
 function setupMenus() {
-  const optionsFactory = new OptionsFactory();
-  const option1 = optionsFactory.createNewBannerOption(
-    "shamiscript",
-    "💋",
-    "Shamiscript options"
-  );
-  const option1Menu = optionsFactory.createNewOptionsMenu(
-    "shamiscript-options"
-  );
-  optionsFactory.addClickListeners();
-  optionsFactory.createMenuButt("shamiscript-options", "Info", 0);
-  optionsFactory.createMenuTabContent(
-    document.querySelector("#shamiscript-options > .tab-cont"),
-    0
-  );
-  optionsFactory.addTabContentText("Welcome to slutscript", "shamiscript-options", 0);
-  optionsFactory.addTabContentText("Toggle options will be added here soon, please look forward to it", "shamiscript-options", 0);
+  // i discovered the builder pattern so im using it everywhere now ehehehehehe
+  const optionsBuilder = new OptionsBuilder("shamiscript");
+  const mainMenu = optionsBuilder
+    .createNewBannerOption("💋", "Slutscript")
+    .createMenuButt("Info", 0)
+    .createMenuTabContent()
+    .addTabContentText("Welcome to <b>Slutscript</b>")
+    .addTabContentText(
+      "Toggle options will be added here soon, please look forward to it"
+    )
+    .addTabContentHR()
+    .addTabContentText("Patch notes")
+    .addTabContentText("- Added toggle options (if they dont work please scream in the thread)")
+    .addTabContentText("- Nerfed slap (Manual controls coming soon)")
+    .addTabContentText("- Reduced Sachikos attack power by 5")
+    .addTabContentText("- Re-added Gosenzos horn")
+    .addTabContentText("- Nuns and prostitutes can no longer kneel")
+    .selectTab(1)
+    .createMenuButt("Commands", 1)
+    .createMenuTabContent()
+    .addTabCheckbox("slapEnabled", "slap a guca", "#slap", handleSlapToggle)
+    .addTabCheckbox("chuuEnabled", "chuu a guca", "#chuu", handleChuuToggle)
+    .addTabCheckbox("spankEnabled", "spank a guca", "#spank", handleSpankToggle)
+    .addTabCheckbox("hugEnabled", "hug a guca", "#hug", handleHugToggle)
+    .build();
 }
 
 function setupObserver() {
@@ -340,4 +468,6 @@ function setupObserver() {
 }
 
 setupMenus();
+loadSettings();
 setupObserver();
+
