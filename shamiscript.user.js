@@ -10,6 +10,7 @@
 // @match       https://sachiko.org/*
 // @match       https://hidamari.moe/*
 // @match       https://monm.ooo/*
+// @match       https://desun.ooo/*
 // @grant       none
 // @version     1.2.3
 // @author      Arona
