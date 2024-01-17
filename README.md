@@ -8,6 +8,7 @@ This userscript enhances your browsing experience by adding custom commands.
 - **#chuu**: Chuu your cute guca and leave a kiss mark on her post
 - **#hug**: Hug and your favorite guca
 - **#spank**: Spank your gucas butte
+- **#taberu**: Eat your guca
 
 ## Installation
 

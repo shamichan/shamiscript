@@ -22,6 +22,7 @@ let slapEnabled = true;
 let chuuEnabled = true;
 let spankEnabled = true;
 let hugEnabled = true;
+let taberuEnabled = true;
 
 function applyScriptToPost(post) {
   if (!post) return;
@@ -49,6 +50,7 @@ function handleCommands(text, mentionedPost) {
     "#chuu": { handler: handleChuu },
     "#spank": { handler: handleSpank },
     "#hug": { handler: handleHug },
+    "#taberu": { handler: handleTaberu },
   };
 
   Object.keys(commandMap).forEach((command) => {
@@ -67,7 +69,7 @@ function handleCommands(text, mentionedPost) {
 
 // handleSlap takes in the post and fucking slaps it
 function handleSlap(post) {
-  if(!slapEnabled) return;
+  if (!slapEnabled) return;
   const computedStyle = window.getComputedStyle(post);
 
   // extract the rotation information from the transform property
@@ -86,7 +88,7 @@ function handleSlap(post) {
 
 // handleSpank takes in the post and fucking spanks it
 function handleSpank(post) {
-  if(!spankEnabled) return;
+  if (!spankEnabled) return;
   // get the current background color
   const currentColor = window.getComputedStyle(post).backgroundColor;
 
@@ -124,7 +126,7 @@ function handleSpank(post) {
 
 // handleChuu takes in the post and fucking chuus it
 function handleChuu(post) {
-  if(!chuuEnabled) return;
+  if (!chuuEnabled) return;
   post.style.transition = "transform 0.2s ease-in-out";
   // apply the horizontal squish effect
   post.style.transform = "scaleX(0.8)";
@@ -154,7 +156,7 @@ function handleChuu(post) {
 
 // handleHug takes in the post and fucking hugs it
 function handleHug(post) {
-  if(!hugEnabled) return;
+  if (!hugEnabled) return;
   post.style.transition = "transform 0.3s ease-in-out";
   // apply the horizontal squish effect
   post.style.transform = "scaleX(0.5)";
@@ -167,6 +169,33 @@ function handleHug(post) {
     },
     { once: true }
   );
+}
+
+// handleTaberu takes in the post and fucking EATS it
+function handleTaberu(post) {
+  // Get the current width and height of the post
+  const postWidth = post.offsetWidth;
+  const postHeight = post.offsetHeight;
+
+  // Calculate the size of the "bite"
+  const biteSize = Math.min(postWidth, postHeight) * 0.2; // Adjust the percentage as needed
+
+  // Calculate the starting point of the "bite"
+  const biteStartX = Math.random() * (postWidth - biteSize);
+  const biteStartY = Math.random() * (postHeight - biteSize);
+
+  // Apply the clip-path to create the "bite" effect
+  post.style.clipPath = `polygon(
+    0% 0%, ${postWidth}px 0%, ${postWidth}px ${postHeight}px,
+    ${biteStartX + biteSize}px ${biteStartY}px,
+    ${biteStartX + biteSize * 0.8}px ${biteStartY + biteSize * 0.2}px,
+    ${biteStartX + biteSize * 0.6}px ${biteStartY + biteSize * 0.5}px,
+    ${biteStartX + biteSize * 0.5}px ${biteStartY + biteSize * 0.8}px,
+    ${biteStartX + biteSize * 0.3}px ${biteStartY + biteSize}px,
+    ${biteStartX}px ${biteStartY + biteSize * 0.8}px,
+    ${biteStartX - biteSize * 0.1}px ${biteStartY + biteSize * 0.5}px,
+    ${biteStartX - biteSize * 0.2}px ${biteStartY + biteSize * 0.2}px
+  )`;
 }
 
 // function to handle mutations and apply the script to posts
@@ -361,7 +390,6 @@ class OptionsBuilder {
 
 function handleChuuToggle() {
   chuuEnabled = document.getElementById("chuuEnabled").checked;
-  console.log(chuuEnabled)
   localStorage.setItem(
     "chuuEnabled",
     document.getElementById("chuuEnabled").checked
@@ -369,7 +397,6 @@ function handleChuuToggle() {
 }
 function handleSlapToggle() {
   slapEnabled = document.getElementById("slapEnabled").checked;
-  console.log(slapEnabled)
   localStorage.setItem(
     "slapEnabled",
     document.getElementById("slapEnabled").checked
@@ -377,7 +404,6 @@ function handleSlapToggle() {
 }
 function handleSpankToggle() {
   spankEnabled = document.getElementById("spankEnabled").checked;
-  console.log(spankEnabled)
   localStorage.setItem(
     "spankEnabled",
     document.getElementById("spankEnabled").checked
@@ -385,12 +411,17 @@ function handleSpankToggle() {
 }
 function handleHugToggle() {
   hugEnabled = document.getElementById("hugEnabled").checked;
-  console.log(hugEnabled)
   localStorage.setItem(
     "hugEnabled",
     document.getElementById("hugEnabled").checked
   );
-
+}
+function handleTaberuToggle() {
+  taberuEnabled = document.getElementById("taberuEnabled").checked;
+  localStorage.setItem(
+    "taberuEnabled",
+    document.getElementById("taberuEnabled").checked
+  );
 }
 
 // do not look here it is not good for your eyes
@@ -406,17 +437,18 @@ function loadSettings() {
 
   slapEnabled = getLocalStorageItem("slapEnabled", true);
   document.getElementById("slapEnabled").checked = slapEnabled;
-  console.log("slap", slapEnabled);
 
   chuuEnabled = getLocalStorageItem("chuuEnabled", true);
   document.getElementById("chuuEnabled").checked = chuuEnabled;
-  console.log("chuu", chuuEnabled);
 
   spankEnabled = getLocalStorageItem("spankEnabled", true);
   document.getElementById("spankEnabled").checked = spankEnabled;
 
   hugEnabled = getLocalStorageItem("hugEnabled", true);
   document.getElementById("hugEnabled").checked = hugEnabled;
+
+  taberuEnabled = getLocalStorageItem("taberuEnabled", true);
+  document.getElementById("taberuEnabled").checked = taberuEnabled;
 }
 
 function getRandomInteger(min, max) {
@@ -433,15 +465,20 @@ function setupMenus() {
     .createMenuTabContent()
     .addTabContentText("Welcome to <b>Slutscript</b>")
     .addTabContentText(
-      "Toggle options will be added here soon, please look forward to it"
+      "More fine-tune controls and command stats will be added soon, please look forward to it"
     )
     .addTabContentHR()
-    .addTabContentText("Patch notes")
-    .addTabContentText("- Added toggle options (if they dont work please scream in the thread)")
-    .addTabContentText("- Nerfed slap (Manual controls coming soon)")
-    .addTabContentText("- Reduced Sachikos attack power by 5")
-    .addTabContentText("- Re-added Gosenzos horn")
-    .addTabContentText("- Nuns and prostitutes can no longer kneel")
+    .addTabContentText("<b>Patch notes</b>")
+    .addTabContentText(
+      "- Added toggle options (if they dont work please scream in the thread)"
+    )
+    .addTabContentText("- You can now <b>#Taberu</b>")
+    .addTabContentText("- Reduced Sachikos attack power by another 10")
+    .addTabContentText(
+      "- Due to balance issues Gosenzos horn was removed once again"
+    )
+    .addTabContentText("- Gucas now start with 10 more Shamicoins")
+    .addTabContentText("- Reduced Jannus attack speed by 17")
     .selectTab(1)
     .createMenuButt("Commands", 1)
     .createMenuTabContent()
@@ -449,6 +486,12 @@ function setupMenus() {
     .addTabCheckbox("chuuEnabled", "chuu a guca", "#chuu", handleChuuToggle)
     .addTabCheckbox("spankEnabled", "spank a guca", "#spank", handleSpankToggle)
     .addTabCheckbox("hugEnabled", "hug a guca", "#hug", handleHugToggle)
+    .addTabCheckbox(
+      "taberuEnabled",
+      "eat a guca",
+      "#taberu",
+      handleTaberuToggle
+    )
     .build();
 }
 
@@ -470,4 +513,3 @@ function setupObserver() {
 setupMenus();
 loadSettings();
 setupObserver();
-
