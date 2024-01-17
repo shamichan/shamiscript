@@ -11,7 +11,7 @@
 // @match       https://hidamari.moe/*
 // @match       https://monm.ooo/*
 // @grant       none
-// @version     1.2.2
+// @version     1.2.3
 // @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
