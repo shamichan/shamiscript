@@ -174,7 +174,9 @@ function handleHug(post) {
 
 // handleTaberu takes in the post and fucking EATS it
 function handleTaberu(post) {
-  if(!taberuEnabled) return;
+  if(!taberuEnabled){
+    return;
+  }
   // Get the current width and height of the post
   const postWidth = post.offsetWidth;
   const postHeight = post.offsetHeight;
