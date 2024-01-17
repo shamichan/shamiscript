@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.4
+// @version     1.2.5
 // @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
@@ -174,6 +174,7 @@ function handleHug(post) {
 
 // handleTaberu takes in the post and fucking EATS it
 function handleTaberu(post) {
+  if(!taberuEnabled) return;
   // Get the current width and height of the post
   const postWidth = post.offsetWidth;
   const postHeight = post.offsetHeight;
