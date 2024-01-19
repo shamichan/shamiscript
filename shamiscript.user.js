@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.6
+// @version     1.2.7
 // @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
@@ -274,7 +274,9 @@ class OptionsBuilder {
       newOption.onclick = () => {
         this.optionModals.forEach((modal) => {
           if (modal.id !== newOption.id + "-options")
-            modal.style.display = "none";
+            if(modal.id !== "moderation-panel"){
+              modal.style.display = "none";
+            }
         });
         const newOptionsMenu = document.getElementById(
           newOption.id + "-options"
