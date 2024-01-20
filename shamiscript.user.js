@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.8
+// @version     1.2.9
 // @author      Arona
 // @downloadURL  https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
 // @description 1/1/1600, 6:06:06 PM
@@ -139,8 +139,8 @@ function handleChuu(post) {
   kissMark.style.position = "absolute";
   kissMark.style.fontSize = "24px";
 
-  const randomX = Math.random() * post.clientWidth;
-  const randomY = Math.random() * post.clientHeight;
+  const randomX = Math.random() * (post.clientWidth - 24);
+  const randomY = Math.random() * (post.clientHeight - 24);
   const randomRotation = getRandomInteger(0, 360);
   kissMark.style.left = `${randomX}px`;
   kissMark.style.top = `${randomY}px`;
@@ -476,17 +476,12 @@ function setupMenus() {
       "More fine-tune controls and command stats will be added soon, please look forward to it"
     )
     .addTabContentHR()
+    .addTabContentText("<b>Contributing</b>")
+    .addTabContentText("For feature requests or bug reports please create a new issue at")
+    .addTabContentText(`<a target="_blank" href="https://github.com/shamichan/shamiscript/">https://github.com/shamichan/shamiscript/</a>`)
+    .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText(
-      "- Added toggle options (if they dont work please scream in the thread)"
-    )
-    .addTabContentText("- You can now <b>#Taberu</b>")
-    .addTabContentText("- Reduced Sachikos attack power by another 10")
-    .addTabContentText(
-      "- Due to balance issues Gosenzos horn was removed once again"
-    )
-    .addTabContentText("- Gucas now start with 10 more Shamicoins")
-    .addTabContentText("- Reduced Jannus attack speed by 17")
+    .addTabContentText("- Fixed chuus breaking post boundaries")
     .selectTab(1)
     .createMenuButt("Commands", 1)
     .createMenuTabContent()
