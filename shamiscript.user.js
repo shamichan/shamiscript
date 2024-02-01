@@ -86,7 +86,7 @@ function handleSlap(post) {
   const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
 
   // apply the new rotation incrementally
-  const newRotation = currentRotation + getRandomInteger(5, 10);
+  const newRotation = currentRotation + getRandomInteger(slapMin, slapMax);
 
   post.style.transition = "transform 0.05s linear";
   post.style.transform = `rotate(${newRotation}deg)`;
