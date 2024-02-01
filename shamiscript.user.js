@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.10
+// @version     1.2.11
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -76,6 +76,7 @@ function handleCommands(text, mentionedPost) {
 // handleSlap takes in the post and fucking slaps it
 function handleSlap(post) {
   if (!slapEnabled) return;
+  console.log(slapMin = document.getElementById("slapMin").value)
   const computedStyle = window.getComputedStyle(post);
 
   // extract the rotation information from the transform property
@@ -86,7 +87,7 @@ function handleSlap(post) {
   const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
 
   // apply the new rotation incrementally
-  const newRotation = currentRotation + getRandomInteger(slapMin, slapMax);
+  const newRotation = currentRotation + getRandomInteger(5, 10);
 
   post.style.transition = "transform 0.05s linear";
   post.style.transform = `rotate(${newRotation}deg)`;
@@ -279,11 +280,11 @@ function loadSettings() {
   taberuEnabled = getLocalStorageItem("taberuEnabled", true);
   document.getElementById("taberuEnabled").checked = taberuEnabled;
 
-  minSlap = getLocalStorageItem("slapMin", 10);
-  document.getElementById("slapMin").value = minSlap;
+  slapMin = getLocalStorageItem("slapMin", 10);
+  document.getElementById("slapMin").value = slapMin;
 
-  maxSlap = getLocalStorageItem("slapMax", 70);
-  document.getElementById("slapMax").value = maxSlap;
+  slapMax = getLocalStorageItem("slapMax", 70);
+  document.getElementById("slapMax").value = slapMax;
 }
 
 function getRandomInteger(min, max) {
