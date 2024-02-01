@@ -76,7 +76,6 @@ function handleCommands(text, mentionedPost) {
 // handleSlap takes in the post and fucking slaps it
 function handleSlap(post) {
   if (!slapEnabled) return;
-  console.log(slapMin = document.getElementById("slapMin").value)
   const computedStyle = window.getComputedStyle(post);
 
   // extract the rotation information from the transform property
