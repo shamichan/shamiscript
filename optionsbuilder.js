@@ -163,6 +163,29 @@ class OptionsBuilder {
     return this;
   }
 
+  addTabInput(inputId, inputTitle, labelText, OnChange = () => {}) {
+    const tabElement = document.querySelector(
+      `#${this.optionId} > .tab-cont > [data-id="${this.tabId}"]`
+    );
+    const input = document.createElement("input");
+    const label = document.createElement("label");
+    const br = document.createElement("br");
+
+    input.type = "input";
+    input.id = inputId;
+    input.title = inputTitle;
+    input.addEventListener("change", OnChange);
+
+    label.htmlFor = inputId;
+    label.title = inputTitle;
+    label.textContent = labelText;
+
+    tabElement.appendChild(input);
+    tabElement.appendChild(label);
+    tabElement.appendChild(br);
+    return this;
+  }
+
   selectTab(tabId) {
     this.tabId = tabId;
     return this;
