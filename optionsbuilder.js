@@ -180,8 +180,9 @@ class OptionsBuilder {
     label.title = inputTitle;
     label.textContent = labelText;
 
-    tabElement.appendChild(input);
+    tabElement.appendChild(br);
     tabElement.appendChild(label);
+    tabElement.appendChild(input);
     tabElement.appendChild(br);
     return this;
   }
