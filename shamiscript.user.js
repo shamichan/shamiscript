@@ -7,12 +7,11 @@
 // @match       https://suwak.ooo/*
 // @match       https://gosenz.ooo/*
 // @match       https://sachik.ooo/*
-// @match       https://sachiko.org/*
 // @match       https://hidamari.moe/*
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.11
+// @version     1.2.12
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
