@@ -12,7 +12,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.9
+// @version     1.2.10
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -25,6 +25,8 @@ let chuuEnabled = true;
 let spankEnabled = true;
 let hugEnabled = true;
 let taberuEnabled = true;
+let slapMin = 10;
+let slapMax = 70;
 
 const ChuuIcon = `<svg width="24px" height="24px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione" preserveAspectRatio="xMidYMid meet"><path d="M11.2 40.7c3.7-1.9 5.3-2.5-.7-4.3c1.1-.1 7.5 2.1 9.5-.3c1.7-1.2-6.5-2.7-7-3.9c1.6 1 8.6 4.1 9.9 1.3c-.2-1-1.2-2.9-4.7-3.9c1 .4 3.1.2 3.9-.6c-.3-.9-4.2-3.3-4.6-6.4c1.3 1.8 2.9 4.9 4.9 5.5c0 0 .6-1.5 2.8-2.1c-2 0-4-1.2-4.3-2.2c1.4 2.3 6.4 1.1 8.5 3c0 0-.4-1.3 1-3c.1-.4-.8-1.1-.3-1.3c.2.2.2.9.8.8c1.3-.5 2.5-2.2 1.7-3.8c.6.3.7 1.7.8 2.5c.8 0 2.2-.1 3.7 1.3c.3-.2.2-.7.5-.9c.3 1 .3 3.1 1.7 3c1.1 0 2.5-2.4 2.7-3.4c-.1 2.3 1.2 2 1.6 2.1c1-.1 2.1-3.4 2.6-3.4c-.2.4-.2 1.7-.1 2.4c1.1.2 3.9-1.1 4.5-1.7c-.1.5-.3.7-.2 1.3c1 .2 6.7-2.5 8-5.3c-1.5-.7-2.7-1.5-3.9-1.9c-.7.6-.7 3.1-1.6 2.9c.4-.6 1.4-2.7.6-3.4c-3.8-2.6-1.9 2-2.3 2.4c0-.8-1.7-5.5-3.3-5.1c-.3.4-.9-2.3-2 3.6c.1-1 1.3-4.9-4.5-6.5c-.3 1.5 1.7 6 1.2 7c-.2-1.9-1.7-6.5-2.7-7.7c-2.2-.9-6.1-2.5-7.8-1.9c-2 .5 3 5 1.6 6.8c.3-2.6-2.8-5.4-4.9-5.4c-4.3 2.2-.8 6.3-1.5 8.3c-.4-2.4-1.6-2.9-1.4-5.7c-1.1.8-1.2 2.2-2.4 3.3c-.6.2-.9-.1-1.5 0c-1 1.1.9 3.4.5 4.3c-.7-1.5-.7-3.7-2.4-3.9c-1.4-.9-4.3-.2-6.5 1.3c-2.5.7-4.9 7.5-4.8 8.4c.2 1.2 2.3 1.4 2.4 2.6c-.9-.5-1.2-1.5-2.6-1.4c-.5 1.1-.8 1.9-.9 3.5c1.5 1 3.4 1.9 3.9 3.4c-1.4-.5-2.2-2.6-4-2c-2.3 6.5.5 5.3.8 6.2c-.8.3-1.6-.5-1.9 0c-1.8 3.3.3 3.3.5 3.9H5.7c-.7.6-.8 2.7-.6 3.7c1.5-.7 4.7-1.4 3.9-3.2c.8.2 1.7.2 2.2-.2" fill="#c94747"></path><path d="M50.7 23.7c-1.7.4-6.9.8-8.2 2.3c1.5 2.4 7.4 2.8 8.9 5.2c-2.3-1.4-7-3.4-10-4.2c-3.6-.8-2.5 1.2-3.7 4.1c.5 1.1 2.2 4.1 2.3 5.1c-.9-1-1.7-5.6-3.2-3.1c-2.4 3.9 1.3 4.7 2.9 8.3c-1-1.4-3-4.1-4.3-5.7l-.9 1.5c-1.5-.4-2.2-.3-2.2-.3c.9 2.2 3.7 6.7 4.5 8.1c-2.7-2.7-3.9-5.3-5.3-8.2c-1.2 0-2.3-.5-3.5-.7c-.1 2.5 1 4.1 1 5.9c-.9-2.7-1.5-8.5-6.8-6.6c-1.5 3.1.7 9.1.8 11.7c-1-2.9-.9-7-2.2-9.5c-1.7-.1-4.4-.2-3.9.9c-3.4.9-12.3 6.2-10.8 7.6c2.7 2.6 8.6 6 12.4 6.7c.2-1 .6-2.7 1-3.3c.4 1.6.9 3.6 2.5 4c.4-.5-.2-1.8-.1-2.6c1.4 1.7 5.2 3.7 7.9 2.4c.3-1-.8-2.4-.2-3.1c.4 2.7 6.6 2.9 7.1.5c.2-1.1-.9-1.8-.9-2.5c.9 1 1.3 2.3 2.8 2.2c3.3-.2 1.1-4.8.5-6.6c.8 1.6 1.8 4 3 5.2c.9-.2 1.3-1.5.8-2.6c2.9 2 3.2.4 2.1-3.6c0-.1-.1-.2-.1-.3c0 .1.1.2.1.3c.3.8 1.4 2.7 2.1 3c2.6-1.1-1.1-5.5-1.6-6.3c1.1.9 2.4 3.8 4.1 4.2c.3-.2.3-1.8.5-2.1c-.6-3.9-4.5-6.4-6-8.9c2.4 2.2 4.8 6.8 7.9 8.4c1-1.3-.9-4.8-1.5-5.8c.9.4 2.4 2.7 3.5 2.8c1.1-.6-.5-3.5-1.2-4.5c.5.2 1.9 1.7 2.7 1.5c.3-1.4-1.5-3.1-1.9-4.2c.5.1 2.1 1.7 2.8 1.7c.7-2.9 1.9-6.3 1.7-13.1c-1 .1-6.1 3.9-7.4 4.2" fill="#ed4c5c"></path></svg>`;
 
@@ -84,7 +86,7 @@ function handleSlap(post) {
   const currentRotation = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
 
   // apply the new rotation incrementally
-  const newRotation = currentRotation + getRandomInteger(10, 70);
+  const newRotation = currentRotation + getRandomInteger(slapMin, slapMax);
 
   post.style.transition = "transform 0.05s linear";
   post.style.transform = `rotate(${newRotation}deg)`;
@@ -224,38 +226,31 @@ function handleMutations(mutations) {
 
 function handleChuuToggle() {
   chuuEnabled = document.getElementById("chuuEnabled").checked;
-  localStorage.setItem(
-    "chuuEnabled",
-    document.getElementById("chuuEnabled").checked
-  );
+  localStorage.setItem("chuuEnabled", chuuEnabled);
 }
 function handleSlapToggle() {
   slapEnabled = document.getElementById("slapEnabled").checked;
-  localStorage.setItem(
-    "slapEnabled",
-    document.getElementById("slapEnabled").checked
-  );
+  localStorage.setItem("slapEnabled", slapEnabled);
 }
 function handleSpankToggle() {
   spankEnabled = document.getElementById("spankEnabled").checked;
-  localStorage.setItem(
-    "spankEnabled",
-    document.getElementById("spankEnabled").checked
-  );
+  localStorage.setItem("spankEnabled", spankEnabled);
 }
 function handleHugToggle() {
   hugEnabled = document.getElementById("hugEnabled").checked;
-  localStorage.setItem(
-    "hugEnabled",
-    document.getElementById("hugEnabled").checked
-  );
+  localStorage.setItem("hugEnabled", hugEnabled);
 }
 function handleTaberuToggle() {
   taberuEnabled = document.getElementById("taberuEnabled").checked;
-  localStorage.setItem(
-    "taberuEnabled",
-    document.getElementById("taberuEnabled").checked
-  );
+  localStorage.setItem("taberuEnabled", taberuEnabled);
+}
+function handleSlapMin() {
+  slapMin = document.getElementById("slapMin").value;
+  localStorage.setItem("slapMin", slapMin);
+}
+function handleSlapMax() {
+  slapMax = document.getElementById("slapMax").value;
+  localStorage.setItem("slapMax", slapMax);
 }
 
 // do not look here it is not good for your eyes
@@ -283,6 +278,12 @@ function loadSettings() {
 
   taberuEnabled = getLocalStorageItem("taberuEnabled", true);
   document.getElementById("taberuEnabled").checked = taberuEnabled;
+
+  minSlap = getLocalStorageItem("slapMin", 10);
+  document.getElementById("slapMin").value = minSlap;
+
+  maxSlap = getLocalStorageItem("slapMax", 70);
+  document.getElementById("slapMax").value = maxSlap;
 }
 
 function getRandomInteger(min, max) {
@@ -308,7 +309,8 @@ function infoMenu(builder, tabNum) {
     )
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText("- Fixed chuus breaking post boundaries");
+    .addTabContentText("- Added slap angle controls")
+    .addTabContentText("- Added foundations for stalker menu")
 }
 
 function commandMenu(builder, tabNum) {
@@ -325,13 +327,37 @@ function commandMenu(builder, tabNum) {
       "eat a guca",
       "#taberu",
       handleTaberuToggle
+    )
+    .addTabInput(
+      "slapMin",
+      "Minimum slap angle",
+      "Minimum slap angle",
+      handleSlapMin
+    )
+    .addTabInput(
+      "slapMax",
+      "Maximum slap angle",
+      "Maximum slap angle",
+      handleSlapMax
     );
+}
+
+async function stalkerMenu(builder, tabNum) {
+  const bins = await fetchBins();
+  builder
+    .selectTab(tabNum)
+    .createMenuButt("Stalk", tabNum)
+    .createMenuTabContent();
+  bins.forEach((bin) => {
+    builder.addTabContentText(`${bin.binBy}, ${bin.binReason}`)
+  });
 }
 
 function setupMenus() {
   const optionsBuilder = new OptionsBuilder("shamiscript");
   infoMenu(optionsBuilder, 0);
   commandMenu(optionsBuilder, 1);
+  stalkerMenu(optionsBuilder, 2)
 }
 function setupObserver() {
   const observer = new MutationObserver(handleMutations);
@@ -345,6 +371,43 @@ function setupObserver() {
   };
 
   observer.observe(thread, config);
+}
+
+async function fetchBins() {
+  let binnedposts = [];
+  var baseURL = new URL(window.location).origin;
+  var board = window.location.pathname.split("/")[1];
+  var url = new URL("/html/mod-log/" + board, baseURL);
+  await fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error stalking bins");
+      }
+      return response.text();
+    })
+    .then((htmlContent) => {
+      var tempContainer = document.createElement("div");
+      tempContainer.innerHTML = htmlContent;
+      let bins = tempContainer.querySelectorAll("tr");
+
+      bins.forEach((bin) => {
+        const row = bin.querySelectorAll("td");
+        if (row.length >= 5) {
+          const binReason = row[4].innerHTML.trim();
+          const binBy = row[1].innerHTML;
+          const binnedPostNumber = row[2].innerHTML;
+
+          if (binBy != "system" && binReason.length > 0) {
+            binnedposts.push({ binBy, binReason, binnedPostNumber });
+          }
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error stalking bins:", error);
+    });
+
+  return binnedposts;
 }
 
 setupMenus();
