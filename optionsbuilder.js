@@ -1,5 +1,5 @@
 // yes this is a terrible idea but i dont care
-export default class OptionsBuilder {
+class OptionsBuilder {
   constructor(optionName) {
     this.optionName = optionName;
     this.optionId = this.optionName + "-options";
