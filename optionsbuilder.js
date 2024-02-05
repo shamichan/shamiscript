@@ -187,6 +187,16 @@ class OptionsBuilder {
     return this;
   }
 
+  addRawHtml(innerHTML){
+    const tabElement = document.querySelector(
+      `#${this.optionId} > .tab-cont > [data-id="${this.tabId}"]`
+    );
+    const div = document.createElement('div')
+    div.innerHTML = innerHTML
+    tabElement.appendChild(div)
+    return this
+  }
+
   selectTab(tabId) {
     this.tabId = tabId;
     return this;
