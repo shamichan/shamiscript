@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.13
+// @version     1.2.14
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -387,24 +387,12 @@ async function fetchBins() {
       tempContainer.innerHTML = htmlContent;
 
       let bins = tempContainer.querySelector("table");
-      // get rid of time haet time
-      let headerRow = bins.querySelector("tr:first-child");
-      let timeHeader = headerRow.querySelector("th:nth-child(4)");
-      if (timeHeader) {
-        timeHeader.remove();
-      }
-
-      // oh and every row of time
       let rows = bins.querySelectorAll("tr");
       rows.forEach((row) => {
         // haet system bloat
         let binner = row.querySelector("td:nth-child(2)");
         if (binner && binner.innerHTML === "system") {
           row.remove();
-        }
-        let time = row.querySelector("td:nth-child(4)");
-        if (time) {
-          time.remove();
         }
       });
 
