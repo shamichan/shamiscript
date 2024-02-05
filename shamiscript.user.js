@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.12
+// @version     1.2.13
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -309,7 +309,7 @@ function infoMenu(builder, tabNum) {
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
     .addTabContentText("- Added slap angle controls")
-    .addTabContentText("- Added foundations for stalker menu")
+    .addTabContentText("- Added foundations for stalker menu");
 }
 
 function commandMenu(builder, tabNum) {
@@ -345,18 +345,16 @@ async function stalkerMenu(builder, tabNum) {
   const bins = await fetchBins();
   builder
     .selectTab(tabNum)
-    .createMenuButt("Stalk", tabNum)
-    .createMenuTabContent();
-  bins.forEach((bin) => {
-    builder.addTabContentText(`${bin.binBy}, ${bin.binReason}`)
-  });
+    .createMenuButt("Modlog", tabNum)
+    .createMenuTabContent()
+    .addRawHtml(bins);
 }
 
 function setupMenus() {
   const optionsBuilder = new OptionsBuilder("shamiscript");
   infoMenu(optionsBuilder, 0);
   commandMenu(optionsBuilder, 1);
-  stalkerMenu(optionsBuilder, 2)
+  stalkerMenu(optionsBuilder, 2);
 }
 function setupObserver() {
   const observer = new MutationObserver(handleMutations);
@@ -373,7 +371,7 @@ function setupObserver() {
 }
 
 async function fetchBins() {
-  let binnedposts = [];
+  let rawhtml = "";
   var baseURL = new URL(window.location).origin;
   var board = window.location.pathname.split("/")[1];
   var url = new URL("/html/mod-log/" + board, baseURL);
@@ -387,26 +385,36 @@ async function fetchBins() {
     .then((htmlContent) => {
       var tempContainer = document.createElement("div");
       tempContainer.innerHTML = htmlContent;
-      let bins = tempContainer.querySelectorAll("tr");
 
-      bins.forEach((bin) => {
-        const row = bin.querySelectorAll("td");
-        if (row.length >= 5) {
-          const binReason = row[4].innerHTML.trim();
-          const binBy = row[1].innerHTML;
-          const binnedPostNumber = row[2].innerHTML;
+      let bins = tempContainer.querySelector("table");
+      // get rid of time haet time
+      let headerRow = bins.querySelector("tr:first-child");
+      let timeHeader = headerRow.querySelector("th:nth-child(4)");
+      if (timeHeader) {
+        timeHeader.remove();
+      }
 
-          if (binBy != "system" && binReason.length > 0) {
-            binnedposts.push({ binBy, binReason, binnedPostNumber });
-          }
+      // oh and every row of time
+      let rows = bins.querySelectorAll("tr");
+      rows.forEach((row) => {
+        // haet system bloat
+        let binner = row.querySelector("td:nth-child(2)");
+        if (binner && binner.innerHTML === "system") {
+          row.remove();
+        }
+        let time = row.querySelector("td:nth-child(4)");
+        if (time) {
+          time.remove();
         }
       });
+
+      rawhtml = `<table>${bins.innerHTML}</table>`;
     })
     .catch((error) => {
       console.error("Error stalking bins:", error);
     });
 
-  return binnedposts;
+  return rawhtml;
 }
 
 setupMenus();
