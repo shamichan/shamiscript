@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.14
+// @version     1.2.15
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -56,6 +56,8 @@ function handleCommands(text, mentionedPost) {
     "#spank": { handler: handleSpank },
     "#hug": { handler: handleHug },
     "#taberu": { handler: handleTaberu },
+    "#flen": {handler: handleFlen},
+    "#unflen": {handler: handleUnflen},
   };
 
   Object.keys(commandMap).forEach((command) => {
@@ -206,6 +208,13 @@ function handleTaberu(post) {
   )`;
 }
 
+function handleFlen(post) {
+  post.querySelector(".name").innerHTML = 'Flen'
+}
+function handleUnflen(post) {
+  post.querySelector(".name").innerHTML = 'Arisu'
+}
+
 // function to handle mutations and apply the script to posts
 function handleMutations(mutations) {
   mutations.forEach((mutation) => {
@@ -308,8 +317,9 @@ function infoMenu(builder, tabNum) {
     )
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText("- Added slap angle controls")
-    .addTabContentText("- Added foundations for stalker menu");
+    .addTabContentText("- Added #flen and #unflen")
+    .addTabContentText("- Added reports tab")
+    .addTabContentText("- Modified modlog and reports to update every 30 seconds");
 }
 
 function commandMenu(builder, tabNum) {
@@ -341,20 +351,30 @@ function commandMenu(builder, tabNum) {
     );
 }
 
-async function stalkerMenu(builder, tabNum) {
-  const bins = await fetchBins();
+async function modLogMenu(builder, tabNum) {
   builder
     .selectTab(tabNum)
     .createMenuButt("Modlog", tabNum)
     .createMenuTabContent()
-    .addRawHtml(bins);
+    .addRawHtml("<div id='bins'></div>");
+  updateBins();
+}
+
+async function reportMenu(builder, tabNum) {
+  builder
+    .selectTab(tabNum)
+    .createMenuButt("Reports", tabNum)
+    .createMenuTabContent()
+    .addRawHtml("<div id='reports'></div>");
+  updateReports();
 }
 
 function setupMenus() {
   const optionsBuilder = new OptionsBuilder("shamiscript");
   infoMenu(optionsBuilder, 0);
   commandMenu(optionsBuilder, 1);
-  stalkerMenu(optionsBuilder, 2);
+  modLogMenu(optionsBuilder, 2);
+  reportMenu(optionsBuilder, 3);
 }
 function setupObserver() {
   const observer = new MutationObserver(handleMutations);
@@ -370,11 +390,11 @@ function setupObserver() {
   observer.observe(thread, config);
 }
 
-async function fetchBins() {
+async function updateBins() {
   let rawhtml = "";
-  var baseURL = new URL(window.location).origin;
-  var board = window.location.pathname.split("/")[1];
-  var url = new URL("/html/mod-log/" + board, baseURL);
+  const baseURL = new URL(window.location).origin;
+  const board = window.location.pathname.split("/")[1];
+  const url = new URL("/html/mod-log/" + board, baseURL);
   await fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -402,9 +422,48 @@ async function fetchBins() {
       console.error("Error stalking bins:", error);
     });
 
-  return rawhtml;
+  const binDiv = document.getElementById("bins");
+  binDiv.innerHTML = rawhtml;
 }
 
+async function updateReports() {
+  let rawhtml = "";
+  const baseURL = new URL(window.location).origin;
+  const board = window.location.pathname.split("/")[1];
+  const url = new URL("/html/reports/" + board, baseURL);
+  await fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Error stalking reports");
+      }
+      return response.text();
+    })
+    .then((htmlContent) => {
+      var tempContainer = document.createElement("div");
+      tempContainer.innerHTML = htmlContent;
+
+      let bins = tempContainer.querySelector("table");
+
+      rawhtml = `<table>${bins.innerHTML}</table>`;
+    })
+    .catch((error) => {
+      console.error("Error stalking reports:", error);
+    });
+
+  const binDiv = document.getElementById("reports");
+  binDiv.innerHTML = rawhtml;
+}
+
+function styleTables() {
+  let styleElement = document.createElement("style");
+  const css = 'th, td {padding: 0px 4px; border: 1px solid black;}'
+  styleElement.appendChild(document.createTextNode(css));
+  document.head.appendChild(styleElement);
+}
+
+styleTables();
 setupMenus();
 loadSettings();
 setupObserver();
+setInterval(updateBins, 30000);
+setInterval(updateReports, 30000);
