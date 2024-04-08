@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.2.2
+// @version     1.3.0
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
