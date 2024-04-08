@@ -74,7 +74,6 @@ function handleCommands(text, mentionedPost) {
   });
 }
 
-// handleSlap takes in the post and fucking slaps it
 function handleSlap(post) {
   if (!slapEnabled) return;
   const computedStyle = window.getComputedStyle(post);
@@ -93,7 +92,6 @@ function handleSlap(post) {
   post.style.transform = `rotate(${newRotation}deg)`;
 }
 
-// handleSpank takes in the post and fucking spanks it
 function handleSpank(post) {
   if (!spankEnabled) return;
   // get the current background color
@@ -131,7 +129,6 @@ function handleSpank(post) {
   }, 100);
 }
 
-// handleChuu takes in the post and fucking chuus it
 function handleChuu(post) {
   if (!chuuEnabled) return;
   post.style.transition = "transform 0.2s ease-in-out";
@@ -161,7 +158,6 @@ function handleChuu(post) {
   );
 }
 
-// handleHug takes in the post and fucking hugs it
 function handleHug(post) {
   if (!hugEnabled) return;
   post.style.transition = "transform 0.3s ease-in-out";
@@ -178,7 +174,6 @@ function handleHug(post) {
   );
 }
 
-// handleTaberu takes in the post and fucking EATS it
 function handleTaberu(post) {
   if (!taberuEnabled) {
     return;
@@ -221,9 +216,9 @@ function handleMutations(mutations) {
     const post = mutation.target;
 
     if (
-      mutation.oldValue &&
-      (mutation.oldValue.split(" ").includes("editing") ||
-        mutation.oldValue.split(" ").includes("reply-form")) &&
+      mutation.oldValue && 
+      !mutation.oldValue.split(" ").includes("reply-form") &&
+      mutation.oldValue.split(" ").includes("editing") &&
       !post.classList.contains("editing") &&
       !post.classList.contains("reply-form")
     ) {
@@ -261,7 +256,6 @@ function handleSlapMax() {
   localStorage.setItem("slapMax", slapMax);
 }
 
-// do not look here it is not good for your eyes
 function loadSettings() {
   function getLocalStorageItem(key, defaultValue) {
     const storedValue = localStorage.getItem(key);
@@ -317,9 +311,12 @@ function infoMenu(builder, tabNum) {
     )
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText("- Added #flen and #unflen")
-    .addTabContentText("- Added reports tab")
-    .addTabContentText("- Modified modlog and reports to update every 30 seconds");
+    .addTabContentText("- Fixed gucas having two mouths when chuuing")
+    .addTabContentText("- As a consequence of the above fix you can no longer taberu gucas midpost")
+    .addTabContentText("- Nihahaha!")
+    .addTabContentText("- Nihahaha~")
+    .addTabContentText("- Ni Ha Ha Ha")
+    .addTabContentText("- Niha!");
 }
 
 function commandMenu(builder, tabNum) {
