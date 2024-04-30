@@ -33,19 +33,15 @@ function applyScriptToPost(post) {
   if (!post) return;
 
   const blockQuote = post.querySelector(".post-container > blockquote");
-  const regex = />>\d+/;
-  const matches = regex.exec(blockQuote.textContent);
-  let postId = "";
-  let mentionedPost;
+  const regex = />>(\d+)\s*([\s\S]*?)(?=>>\d+|$)/g;
+  let matches;
+  while ((matches = regex.exec(blockQuote.textContent)) !== null) {
+    const postId = matches[1];
+    const content = matches[2];
 
-  if (matches) {
-    matches.forEach((match) => {
-      postId = match.replace(/^>>/, "");
-      const mentionedPostId = "p" + postId;
-      mentionedPost = document.getElementById(mentionedPostId);
-
-      handleCommands(blockQuote.textContent, mentionedPost);
-    });
+    const mentionedPostId = "p" + postId;
+    const mentionedPost = document.getElementById(mentionedPostId);
+    handleCommands(content, mentionedPost);
   }
 }
 
@@ -56,8 +52,8 @@ function handleCommands(text, mentionedPost) {
     "#spank": { handler: handleSpank },
     "#hug": { handler: handleHug },
     "#taberu": { handler: handleTaberu },
-    "#flen": {handler: handleFlen},
-    "#unflen": {handler: handleUnflen},
+    "#flen": { handler: handleFlen },
+    "#unflen": { handler: handleUnflen },
   };
 
   Object.keys(commandMap).forEach((command) => {
@@ -204,10 +200,10 @@ function handleTaberu(post) {
 }
 
 function handleFlen(post) {
-  post.querySelector(".name").innerHTML = 'Flen'
+  post.querySelector(".name").innerHTML = "Flen";
 }
 function handleUnflen(post) {
-  post.querySelector(".name").innerHTML = 'Arisu'
+  post.querySelector(".name").innerHTML = "Arisu";
 }
 
 // function to handle mutations and apply the script to posts
@@ -216,7 +212,7 @@ function handleMutations(mutations) {
     const post = mutation.target;
 
     if (
-      mutation.oldValue && 
+      mutation.oldValue &&
       !mutation.oldValue.split(" ").includes("reply-form") &&
       mutation.oldValue.split(" ").includes("editing") &&
       !post.classList.contains("editing") &&
@@ -312,7 +308,9 @@ function infoMenu(builder, tabNum) {
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
     .addTabContentText("- Fixed gucas having two mouths when chuuing")
-    .addTabContentText("- As a consequence of the above fix you can no longer taberu gucas midpost")
+    .addTabContentText(
+      "- As a consequence of the above fix you can no longer taberu gucas midpost"
+    )
     .addTabContentText("- Nihahaha!")
     .addTabContentText("- Nihahaha~")
     .addTabContentText("- Ni Ha Ha Ha")
@@ -453,7 +451,7 @@ async function updateReports() {
 
 function styleTables() {
   let styleElement = document.createElement("style");
-  const css = 'th, td {padding: 0px 4px; border: 1px solid black;}'
+  const css = "th, td {padding: 0px 4px; border: 1px solid black;}";
   styleElement.appendChild(document.createTextNode(css));
   document.head.appendChild(styleElement);
 }
