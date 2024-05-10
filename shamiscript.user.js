@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.3.0
+// @version     1.3.1
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -28,6 +28,10 @@ let slapMin = 10;
 let slapMax = 70;
 let chuusSeen = 0;
 let chuusGiven = 0;
+let chuusRecieved = 0;
+let slapsSeen = 0;
+let slapsGiven = 0;
+let slapsRecieved = 0;
 
 const ChuuIcon = `<svg width="24px" height="24px" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--emojione" preserveAspectRatio="xMidYMid meet"><path d="M11.2 40.7c3.7-1.9 5.3-2.5-.7-4.3c1.1-.1 7.5 2.1 9.5-.3c1.7-1.2-6.5-2.7-7-3.9c1.6 1 8.6 4.1 9.9 1.3c-.2-1-1.2-2.9-4.7-3.9c1 .4 3.1.2 3.9-.6c-.3-.9-4.2-3.3-4.6-6.4c1.3 1.8 2.9 4.9 4.9 5.5c0 0 .6-1.5 2.8-2.1c-2 0-4-1.2-4.3-2.2c1.4 2.3 6.4 1.1 8.5 3c0 0-.4-1.3 1-3c.1-.4-.8-1.1-.3-1.3c.2.2.2.9.8.8c1.3-.5 2.5-2.2 1.7-3.8c.6.3.7 1.7.8 2.5c.8 0 2.2-.1 3.7 1.3c.3-.2.2-.7.5-.9c.3 1 .3 3.1 1.7 3c1.1 0 2.5-2.4 2.7-3.4c-.1 2.3 1.2 2 1.6 2.1c1-.1 2.1-3.4 2.6-3.4c-.2.4-.2 1.7-.1 2.4c1.1.2 3.9-1.1 4.5-1.7c-.1.5-.3.7-.2 1.3c1 .2 6.7-2.5 8-5.3c-1.5-.7-2.7-1.5-3.9-1.9c-.7.6-.7 3.1-1.6 2.9c.4-.6 1.4-2.7.6-3.4c-3.8-2.6-1.9 2-2.3 2.4c0-.8-1.7-5.5-3.3-5.1c-.3.4-.9-2.3-2 3.6c.1-1 1.3-4.9-4.5-6.5c-.3 1.5 1.7 6 1.2 7c-.2-1.9-1.7-6.5-2.7-7.7c-2.2-.9-6.1-2.5-7.8-1.9c-2 .5 3 5 1.6 6.8c.3-2.6-2.8-5.4-4.9-5.4c-4.3 2.2-.8 6.3-1.5 8.3c-.4-2.4-1.6-2.9-1.4-5.7c-1.1.8-1.2 2.2-2.4 3.3c-.6.2-.9-.1-1.5 0c-1 1.1.9 3.4.5 4.3c-.7-1.5-.7-3.7-2.4-3.9c-1.4-.9-4.3-.2-6.5 1.3c-2.5.7-4.9 7.5-4.8 8.4c.2 1.2 2.3 1.4 2.4 2.6c-.9-.5-1.2-1.5-2.6-1.4c-.5 1.1-.8 1.9-.9 3.5c1.5 1 3.4 1.9 3.9 3.4c-1.4-.5-2.2-2.6-4-2c-2.3 6.5.5 5.3.8 6.2c-.8.3-1.6-.5-1.9 0c-1.8 3.3.3 3.3.5 3.9H5.7c-.7.6-.8 2.7-.6 3.7c1.5-.7 4.7-1.4 3.9-3.2c.8.2 1.7.2 2.2-.2" fill="#c94747"></path><path d="M50.7 23.7c-1.7.4-6.9.8-8.2 2.3c1.5 2.4 7.4 2.8 8.9 5.2c-2.3-1.4-7-3.4-10-4.2c-3.6-.8-2.5 1.2-3.7 4.1c.5 1.1 2.2 4.1 2.3 5.1c-.9-1-1.7-5.6-3.2-3.1c-2.4 3.9 1.3 4.7 2.9 8.3c-1-1.4-3-4.1-4.3-5.7l-.9 1.5c-1.5-.4-2.2-.3-2.2-.3c.9 2.2 3.7 6.7 4.5 8.1c-2.7-2.7-3.9-5.3-5.3-8.2c-1.2 0-2.3-.5-3.5-.7c-.1 2.5 1 4.1 1 5.9c-.9-2.7-1.5-8.5-6.8-6.6c-1.5 3.1.7 9.1.8 11.7c-1-2.9-.9-7-2.2-9.5c-1.7-.1-4.4-.2-3.9.9c-3.4.9-12.3 6.2-10.8 7.6c2.7 2.6 8.6 6 12.4 6.7c.2-1 .6-2.7 1-3.3c.4 1.6.9 3.6 2.5 4c.4-.5-.2-1.8-.1-2.6c1.4 1.7 5.2 3.7 7.9 2.4c.3-1-.8-2.4-.2-3.1c.4 2.7 6.6 2.9 7.1.5c.2-1.1-.9-1.8-.9-2.5c.9 1 1.3 2.3 2.8 2.2c3.3-.2 1.1-4.8.5-6.6c.8 1.6 1.8 4 3 5.2c.9-.2 1.3-1.5.8-2.6c2.9 2 3.2.4 2.1-3.6c0-.1-.1-.2-.1-.3c0 .1.1.2.1.3c.3.8 1.4 2.7 2.1 3c2.6-1.1-1.1-5.5-1.6-6.3c1.1.9 2.4 3.8 4.1 4.2c.3-.2.3-1.8.5-2.1c-.6-3.9-4.5-6.4-6-8.9c2.4 2.2 4.8 6.8 7.9 8.4c1-1.3-.9-4.8-1.5-5.8c.9.4 2.4 2.7 3.5 2.8c1.1-.6-.5-3.5-1.2-4.5c.5.2 1.9 1.7 2.7 1.5c.3-1.4-1.5-3.1-1.9-4.2c.5.1 2.1 1.7 2.8 1.7c.7-2.9 1.9-6.3 1.7-13.1c-1 .1-6.1 3.9-7.4 4.2" fill="#ed4c5c"></path></svg>`;
 
@@ -73,8 +77,16 @@ function handleCommands(text, mentionedPost, isKimi) {
   });
 }
 
-function handleSlap(post) {
+function handleSlap(post, isKimi) {
   if (!slapEnabled) return;
+  slapsSeen += 1;
+  if (isKimi) {
+    slapsRecieved += 1;
+  }
+  if (checkForKimi(post)){
+    slapsGiven += 1;
+  }
+  handleSlapUpdate();
   const computedStyle = window.getComputedStyle(post);
 
   // extract the rotation information from the transform property
@@ -133,6 +145,10 @@ function handleChuu(post, isKimi) {
   chuusSeen += 1;
   if (isKimi) {
     chuusGiven += 1;
+  }
+  const gotChuud = checkForKimi(post);
+  if (gotChuud) {
+    chuusRecieved += 1;
   }
   handleChuusUpdate();
   post.style.transition = "transform 0.2s ease-in-out";
@@ -269,6 +285,20 @@ function handleChuusUpdate(){
 
   document.getElementById("chuusGiven").innerHTML = chuusGiven;
   localStorage.setItem("chuusGiven", chuusGiven);
+
+  document.getElementById("chuusGiven").innerHTML = chuusRecieved;
+  localStorage.setItem("chuusRecieved", chuusRecieved);
+}
+
+function handleSlapUpdate(){
+  document.getElementById("slapsSeen").innerHTML = slapsSeen;
+  localStorage.setItem("slapsSeen", slapsSeen);
+
+  document.getElementById("slapsGiven").innerHTML = slapsGiven;
+  localStorage.setItem("slapsGiven", slapsGiven);
+
+  document.getElementById("slapsGiven").innerHTML = slapsRecieved;
+  localStorage.setItem("slapsRecieved", slapsRecieved);
 }
 
 function loadSettings() {
@@ -281,6 +311,7 @@ function loadSettings() {
     return JSON.parse(storedValue);
   }
 
+  // Toggles
   slapEnabled = getLocalStorageItem("slapEnabled", true);
   document.getElementById("slapEnabled").checked = slapEnabled;
 
@@ -302,11 +333,24 @@ function loadSettings() {
   slapMax = getLocalStorageItem("slapMax", 70);
   document.getElementById("slapMax").value = slapMax;
 
+  // Stats
   chuusSeen = getLocalStorageItem("chuusSeen", 0);
   document.getElementById("chuusSeen").innerHTML = chuusSeen;
 
   chuusGiven = getLocalStorageItem("chuusGiven", 0);
   document.getElementById("chuusGiven").innerHTML = chuusGiven;
+
+  chuusRecieved = getLocalStorageItem("chuusRecieved", 0);
+  document.getElementById("chuusRecieved").innerHTML = chuusRecieved;
+
+  slapsSeen = getLocalStorageItem("slapsSeen", 0);
+  document.getElementById("slapsSeen").innerHTML = slapsSeen;
+
+  slapsGiven = getLocalStorageItem("slapsGiven", 0);
+  document.getElementById("slapsGiven").innerHTML = slapsGiven;
+
+  slapsRecieved = getLocalStorageItem("slapsRecieved", 0);
+  document.getElementById("slapsRecieved").innerHTML = slapsRecieved;
 }
 
 function getRandomInteger(min, max) {
@@ -332,14 +376,9 @@ function infoMenu(builder, tabNum) {
     )
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText("- Fixed gucas having two mouths when chuuing")
-    .addTabContentText(
-      "- As a consequence of the above fix you can no longer taberu gucas midpost"
-    )
-    .addTabContentText("- Nihahaha!")
-    .addTabContentText("- Nihahaha~")
-    .addTabContentText("- Ni Ha Ha Ha")
-    .addTabContentText("- Niha!");
+    .addTabContentText("- Added chuu and slap stats")
+    .addTabContentText("- Fixed stats triggering without a # after a mention")
+    .addTabContentText("- Made bumblebees sweeter");
 }
 
 function commandMenu(builder, tabNum) {
@@ -376,8 +415,21 @@ function statsMenu(builder, tabNum) {
     .selectTab(tabNum)
     .createMenuButt("Stats", tabNum)
     .createMenuTabContent()
-    .addRawHtml(`<div>Chuus seen: <span id="chuusSeen"></span></div>`)
-    .addRawHtml(`<div>Chuus given: <span id="chuusGiven"></span></div>`);
+    .addRawHtml(`
+                <div style="display: grid; grid-template-columns: auto auto auto; grid-template-rows: auto auto; gap: 8px;">
+                    <div style="font-weight: bold; grid-column: 1 / span 3; padding-top: 4px; font-size: 14px">#chuu</div>
+                    <div>Seen: <span id="chuusSeen"></span></div>
+                    <div>Given: <span id="chuusGiven"></span></div>
+                    <div>Recieved: <span id="chuusRecieved"></span></div>
+                </div>`)
+                .addRawHtml(`
+                <br/>
+                <div style="display: grid; grid-template-columns: auto auto auto; grid-template-rows: auto auto; gap: 8px;">
+                    <div style="font-weight: bold; grid-column: 1 / span 3; padding-top: 4px; font-size: 14px">#slap</div>
+                    <div>Seen: <span id="slapsSeen"></span></div>
+                    <div>Given: <span id="slapsGiven"></span></div>
+                    <div>Recieved: <span id="slapsRecieved"></span></div>
+                </div>`); // oh god my eyes im so sorry
 }
 
 async function modLogMenu(builder, tabNum) {
