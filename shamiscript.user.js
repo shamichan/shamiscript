@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.3.1
+// @version     1.3.2
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -286,7 +286,7 @@ function handleChuusUpdate(){
   document.getElementById("chuusGiven").innerHTML = chuusGiven;
   localStorage.setItem("chuusGiven", chuusGiven);
 
-  document.getElementById("chuusGiven").innerHTML = chuusRecieved;
+  document.getElementById("chuusRecieved").innerHTML = chuusRecieved;
   localStorage.setItem("chuusRecieved", chuusRecieved);
 }
 
@@ -297,7 +297,7 @@ function handleSlapUpdate(){
   document.getElementById("slapsGiven").innerHTML = slapsGiven;
   localStorage.setItem("slapsGiven", slapsGiven);
 
-  document.getElementById("slapsGiven").innerHTML = slapsRecieved;
+  document.getElementById("slapsRecieved").innerHTML = slapsRecieved;
   localStorage.setItem("slapsRecieved", slapsRecieved);
 }
 
@@ -377,7 +377,7 @@ function infoMenu(builder, tabNum) {
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
     .addTabContentText("- Added chuu and slap stats")
-    .addTabContentText("- Fixed stats triggering without a # after a mention")
+    .addTabContentText("- Fixed commands triggering without a # after a mention")
     .addTabContentText("- Made bumblebees sweeter");
 }
 
