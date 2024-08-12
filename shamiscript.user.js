@@ -11,11 +11,11 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.3.2
+// @version     1.3.3
 // @author      Arona
-// @require     https://github.com/shamichan/shamiscript/raw/dev/optionsbuilder.js
-// @downloadURL https://github.com/shamichan/shamiscript/raw/dev/shamiscript.user.js
-// @description Development branch of shamiscript, prone to breaking
+// @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
+// @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
+// @description Main branch of shamiscript, prone to being dumb
 // ==/UserScript==
 
 // ill refactor everything soon close your eyes for now its dangerous
