@@ -24,6 +24,7 @@ let chuuEnabled = true;
 let spankEnabled = true;
 let hugEnabled = true;
 let taberuEnabled = true;
+let isDeletedToggleObserverActive = false;
 let slapMin = 10;
 let slapMax = 70;
 let chuusSeen = 0;
@@ -333,6 +334,12 @@ function loadSettings() {
   slapMax = getLocalStorageItem("slapMax", 70);
   document.getElementById("slapMax").value = slapMax;
 
+  isDeletedToggleObserverActive = getLocalStorageItem("unhidebins", false);
+  document.getElementById("unhidebins").checked = isDeletedToggleObserverActive;
+  if (isDeletedToggleObserverActive) {
+    startDeletedToggleObserver();
+  }
+
   // Stats
   chuusSeen = getLocalStorageItem("chuusSeen", 0);
   document.getElementById("chuusSeen").innerHTML = chuusSeen;
@@ -376,15 +383,15 @@ function infoMenu(builder, tabNum) {
     )
     .addTabContentHR()
     .addTabContentText("<b>Patch notes</b>")
-    .addTabContentText("- Added chuu and slap stats")
-    .addTabContentText("- Fixed commands triggering without a # after a mention")
-    .addTabContentText("- Made bumblebees sweeter");
+    .addTabContentText("- Added setting to unhide bins inside of the reports and modlog tab")
+    .addTabContentText("- Fixed issue where the dame desu doesn't dame desu under certain conditions")
+    .addTabContentText("- Weh");
 }
 
 function commandMenu(builder, tabNum) {
   builder
     .selectTab(tabNum)
-    .createMenuButt("Commands", tabNum)
+    .createMenuButt("Settings", tabNum)
     .createMenuTabContent()
     .addTabCheckbox("slapEnabled", "slap a guca", "#slap", handleSlapToggle)
     .addTabCheckbox("chuuEnabled", "chuu a guca", "#chuu", handleChuuToggle)
@@ -407,7 +414,8 @@ function commandMenu(builder, tabNum) {
       "Maximum slap angle",
       "Maximum slap angle",
       handleSlapMax
-    );
+    ).addTabContentHR().
+    addTabCheckbox("unhidebins", "Unhide bins", "Auto-toggle bins", toggleDeletedToggleObserver);
 }
 
 function statsMenu(builder, tabNum) {
@@ -430,6 +438,55 @@ function statsMenu(builder, tabNum) {
                     <div>Given: <span id="slapsGiven"></span></div>
                     <div>Recieved: <span id="slapsRecieved"></span></div>
                 </div>`); // oh god my eyes im so sorry
+}
+
+let deletedToggleObserver;
+function startDeletedToggleObserver() {
+  deletedToggleObserver = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        mutation.addedNodes.forEach(node => {
+            if (node instanceof HTMLElement) {
+                if (node.matches('.deleted-toggle[type="checkbox"]') && node.closest('article').closest('td')) {
+                    node.checked = true;
+                } else {
+                  node.querySelectorAll('.deleted-toggle[type="checkbox"]').forEach(checkbox => {
+                      const article = checkbox.closest('article');
+                      const insideTable = article && article.closest('td')
+                      const insideHoverOverlay = article && article.closest('div').id === "hover-overlay"
+                      if (insideTable || insideHoverOverlay) {
+                          checkbox.checked = true;
+                      }
+                  });
+              }
+            } 
+        });
+    });
+  });
+
+  deletedToggleObserver.observe(document.body, {
+    childList: true,
+    subtree: true
+  });
+
+  isDeletedToggleObserverActive = true;
+  localStorage.setItem("unhidebins", true)
+}
+
+function stopDeletedToggleObserver(){
+  if(deletedToggleObserver){
+    deletedToggleObserver.disconnect();
+    isDeletedToggleObserverActive = false;
+    localStorage.setItem("unhidebins", false)
+  }
+}
+
+// I like this function name a lot
+function toggleDeletedToggleObserver(){
+  if(isDeletedToggleObserverActive){
+    stopDeletedToggleObserver()
+  } else {
+    startDeletedToggleObserver()
+  }
 }
 
 async function modLogMenu(builder, tabNum) {
@@ -548,5 +605,5 @@ styleTables();
 setupMenus();
 loadSettings();
 setupObserver();
-setInterval(updateBins, 30000);
-setInterval(updateReports, 30000);
+setInterval(updateBins, 60000);
+setInterval(updateReports, 60000);
