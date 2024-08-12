@@ -13,9 +13,9 @@
 // @grant       none
 // @version     1.3.2
 // @author      Arona
-// @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
-// @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
-// @description 1/1/1600, 6:06:06 PM
+// @require     https://github.com/shamichan/shamiscript/raw/dev/optionsbuilder.js
+// @downloadURL https://github.com/shamichan/shamiscript/raw/dev/shamiscript.user.js
+// @description Development branch of shamiscript, prone to breaking
 // ==/UserScript==
 
 // ill refactor everything soon close your eyes for now its dangerous
