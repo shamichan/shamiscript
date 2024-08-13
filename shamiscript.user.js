@@ -11,7 +11,7 @@
 // @match       https://monm.ooo/*
 // @match       https://desun.ooo/*
 // @grant       none
-// @version     1.3.3
+// @version     1.3.4
 // @author      Arona
 // @require     https://github.com/shamichan/shamiscript/raw/main/optionsbuilder.js
 // @downloadURL https://github.com/shamichan/shamiscript/raw/main/shamiscript.user.js
@@ -452,7 +452,7 @@ function startDeletedToggleObserver() {
                   node.querySelectorAll('.deleted-toggle[type="checkbox"]').forEach(checkbox => {
                       const article = checkbox.closest('article');
                       const insideTable = article && article.closest('td')
-                      const insideHoverOverlay = article && article.closest('div').id === "hover-overlay"
+                      const insideHoverOverlay = article && article.closest('div') != null && article.closest('div').id === "hover-overlay"
                       if (insideTable || insideHoverOverlay) {
                           checkbox.checked = true;
                       }
